@@ -1,3 +1,7 @@
+# @Author: Patrick Hastings
+# @Github: gnubyte
+# @Site: gnubyte.com
+# ----------------------------
 import setuptools
 
 with open("README.md", "r") as fh:
