@@ -1,7 +1,14 @@
+# @Author: Patrick Hastings
+# @Github: gnubyte
+# @Site: gnubyte.com
+# ----------------------------
 import paramiko
 import json
 import os
 import time
+import logging
+
+logging.getLogger(__name__)
 
 class Server:
     '''
@@ -44,6 +51,29 @@ class Server:
             self.connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             self.connection.connect(hostname = self.serverIP, username = self.userName, password=self.passWord)
 
+    def transfer_file(self, full_path_local_file, full_path_target_path):
+        '''
+        Parameters:
+         - full_path_local_file: String, the full path to the file you want transferred WITH filename at end
+         - full_path_target_path: String, the full path to where you want to puut the file WITH filename at end
+        '''
+        if (self.connection != None and self.connection != None):
+            try:
+                logging.info('SFTP:Connecting to SFTP target to begin transfering file...')
+                sftp_client = self.connection.open_sftp()
+                logging.info('SFTP:Connected. Beginning transfer of file...')
+                sftp_client.put(full_path_local_file, full_path_target_path)
+                logging.info('SFTP:File transferred - closing connection')
+                sftp_client.close()
+                logging.info('SFTP:Closed SFTP client')
+            except Exception as err_file_transfer:
+                err_file_transfer = str(err_file_transfer)
+                logging.error('Error while attempting to transfer file to host with system_message="%s"' % (err_file_transfer))
+                raise Exception('Error while attempting to transfer file to host with system_message="%s"' % (err_file_transfer))
+        else:
+            logging.error("Error Code 09A: no connection was established before attempting to send files. Try calling .connect first.")
+            raise ValueError("Error Code 09A: no connection was established before attempting to send files. Try calling .connect first.")
+
     def __loadkey(self):
         '''
         Private Function
@@ -69,8 +99,9 @@ class Server:
         except Exception as ErrorCode1:
             ErrorCode1 = str(ErrorCode1)
             print('Error Code 1: ERROR occured in Server.__loadkey with message: %s ' %(ErrorCode1))
+            logging.error('Error Code 1: ERROR occured in Server.__loadkey with message: %s ' %(ErrorCode1))
             return True
-            raise ValueError("Error Code 1: ERROR occurred in Server.__loadkey with message: %s " %(ErrorCode1))
+            #raise ValueError("Error Code 1: ERROR occurred in Server.__loadkey with message: %s " %(ErrorCode1))
         
     def __disconnect(self):
         '''
@@ -104,18 +135,22 @@ class Server:
         '''
         if (self.connection != None):
             for command in self.commandsRecipe:
+                logging.info("Run_command:Current Command: "+command)
                 print("Current Command: "+command)
                 stdin, stdout, stderr = self.connection.exec_command(command)
                 Output = stdout.read()
                 Errors = stderr.read()
                 if (command == 'apt-get update'):
-                    print("sleeping")
+                    logging.info("Run_command: sleeping")
+                    print("Run_command:Current Command: sleeping")
                     time.sleep(60)                
                 else:
                     print('sleeping')
                     time.sleep(15)
                 if (Output or Errors):
+                    logging.info(Output)
                     print(Output)
+                    logging.error(Errors)
                     print(Errors)
             self.__disconnect()
             return 0
@@ -127,9 +162,11 @@ class Server:
         On destruction of this Server object/termination of code, run this deconstruction instruction set
         '''
         if (self.connection != None):
+            logging.info('Closing connection')
             print('Closing Connection')
             self.connection.close()
             print('Connection to server %s closed' % (self.serverIP))
+            logging.info('Connection to server %s closed' % (self.serverIP))
             
 
 
