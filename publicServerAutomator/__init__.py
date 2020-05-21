@@ -131,29 +131,40 @@ class Server:
 
     def run_commands(self):
         '''
-        Runs the commands set
+        Runs the commands set by the set_commands
+        returns a list of output from the commands collected
         '''
+        outputAppendix = []
         if (self.connection != None):
             for command in self.commandsRecipe:
-                logging.info("Run_command:Current Command: "+command)
-                print("Current Command: "+command)
-                stdin, stdout, stderr = self.connection.exec_command(command)
-                Output = stdout.read()
-                Errors = stderr.read()
-                if (command == 'apt-get update'):
-                    logging.info("Run_command: sleeping")
-                    print("Run_command:Current Command: sleeping")
-                    time.sleep(60)                
-                else:
-                    print('sleeping')
-                    time.sleep(15)
-                if (Output or Errors):
-                    logging.info(Output)
-                    print(Output)
-                    logging.error(Errors)
-                    print(Errors)
+                try:
+                    logging.info("Run_command:Current Command: "+command)
+                    print("Current Command: "+command)
+                    stdin, stdout, stderr = self.connection.exec_command(command)
+                    Output = stdout.read()
+                    Errors = stderr.read()
+                    if (command == 'apt-get update'):
+                        logging.info("Run_command: sleeping")
+                        print("Run_command:Current Command: sleeping")
+                        time.sleep(60)                
+                    else:
+                        print('sleeping')
+                        time.sleep(15)
+                    if (Output or Errors):
+                        logging.info(Output)
+                        print(Output)
+                        try:
+                            outputAppendix.apppend(str(Output))
+                        except Exception as outputErrAppend:
+                            outputErrAppend = str(outputErrAppend)
+                            logging.error('unable to append output from command output to the results to return back to user/operator, with a system error of: %s' % (outputErrAppend))
+                        logging.error(Errors)
+                        print(Errors)
+                except Exception as runCmdErr100:
+                    errMsg = "Error running command on server with system message="+ str(runCmdErr100)
+                    logging.error(errMsg)
             self.__disconnect()
-            return 0
+            return outputAppendix
         else:
             raise ValueError("Error Code 05A: in Server.run_commands, server connection was not open")
         
