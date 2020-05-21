@@ -4,8 +4,8 @@
 
 ![](https://github.com/gnubyte/publicServerAutomator/raw/master/docs/publicServerAutomator.png?raw=true)
 
-[PublicServerAutomator Github](https://github.com/gnubyte/publicServerAutomator)
-[Changelog](https://raw.githubusercontent.com/gnubyte/publicServerAutomator/master/changelog)
+ * [PublicServerAutomator Github](https://github.com/gnubyte/publicServerAutomator)
+ * [Changelog](https://raw.githubusercontent.com/gnubyte/publicServerAutomator/master/changelog)
 
 **Author**: Patrick Hastings
 **Author Site:**: https://gnubyte.com
