@@ -43,6 +43,7 @@ pip install publicServerAutomator
 
 Below is a brief tutorial of how to use this framework.
 
+-----
 
 ### Running multiple SSH Commands
 
@@ -74,6 +75,7 @@ newDocker.connect()
 output = newDocker.run_commands()
 print(output)
 ```
+-----
 
 #### Running SSH commands with Username & Password Authentication
 
@@ -106,11 +108,13 @@ output = newDocker.run_commands()
 
 ```
 
-
+-----
 
 ### Move file to server via SFTP
 
 How to transfer files with SFTP w & w/o private key authentication
+
+
 
 #### SFTP Private Key Authentication example
 
@@ -123,7 +127,7 @@ someServer = Server(inputKeyPath="publickey.pem", inputKeyPassword='PASS', input
 someServer.connect()
 someServer.transfer_file(full_path_local_file='/home/someGuy/mybigFile.gzip', full_path_target_path='/opt/someSoftware/mybigFile.gzip')
 ```
-
+-----
 
 #### Using Username and Password SFTP Authentication
 
