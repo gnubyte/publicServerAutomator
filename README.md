@@ -6,9 +6,9 @@
 
  * [PublicServerAutomator Github](https://github.com/gnubyte/publicServerAutomator)
  * [Changelog](https://raw.githubusercontent.com/gnubyte/publicServerAutomator/master/changelog)
-
-**Author**: Patrick Hastings
-**Author Site:**: https://gnubyte.com
+ * **Author**: Patrick Hastings
+ * **Author Site:**: https://gnubyte.com
+ * [Pypi repository](https://pypi.org/project/publicServerAutomator/)
 
 
 - [Public Server Automator](#public-server-automator)
