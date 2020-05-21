@@ -1,6 +1,7 @@
 # @Author: Patrick Hastings
-# @Date 4-13-2018
-# ----------------
+# @Github: gnubyte
+# @Site: gnubyte.com
+# ----------------------------
 
 
 
