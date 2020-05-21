@@ -1,7 +1,31 @@
 # Public Server Automator
-## V1.0.1
+## V1.1
+
+
+![](https://github.com/gnubyte/publicServerAutomator/raw/master/docs/publicServerAutomator.png?raw=true)
 
 [PublicServerAutomator Github](https://github.com/gnubyte/publicServerAutomator)
+[Changelog](https://raw.githubusercontent.com/gnubyte/publicServerAutomator/master/changelog)
+
+**Author**: Patrick Hastings
+**Author Site:**: https://gnubyte.com
+
+
+- [Public Server Automator](#public-server-automator)
+  - [V1.1](#v11)
+  - [Purpose](#purpose)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Running multiple SSH Commands](#running-multiple-ssh-commands)
+      - [Running SSH commands with Private Key Authentication](#running-ssh-commands-with-private-key-authentication)
+      - [Running SSH commands with Username & Password Authentication](#running-ssh-commands-with-username--password-authentication)
+    - [Move file to server via SFTP](#move-file-to-server-via-sftp)
+      - [SFTP Private Key Authentication example](#sftp-private-key-authentication-example)
+      - [Using Username and Password SFTP Authentication](#using-username-and-password-sftp-authentication)
+
+
+
+
 
 ## Purpose
 
@@ -17,9 +41,14 @@ pip install publicServerAutomator
 
 ##  Usage
 
+Below is a brief tutorial of how to use this framework.
 
 
-### When using a private key
+### Running multiple SSH Commands
+
+#### Running SSH commands with Private Key Authentication
+
+Here is how you authenticate SSH commands with private key authentication using PublicServerAutomator.
 
 ```
 from publicServerAutomator import Server
@@ -42,11 +71,15 @@ dockerInstructions = [
 newDocker = Server(inputKeyPath="publickey.pem", inputKeyPassword='PASS', inputServerIP="0.0.0.0" )
 newDocker.set_commands(commandList=dockerInstructions)
 newDocker.connect()
-newDocker.run_commands()
+output = newDocker.run_commands()
+print(output)
 ```
 
-### Without using a private key
+#### Running SSH commands with Username & Password Authentication
 
+This is an example of running multiple commands on a host, without using a private key to authenticate.
+
+Notice that the Username and password are specified using `inputUserName` and `inputPassword`.
 
 ```
 from publicServerAutomator import Server
@@ -69,5 +102,39 @@ dockerInstructions = [
 newDocker = Server(inputServerIP='8.8.8.8',inputUserName='root', inputPassword='123lookatme', inputKeyPath='')
 newDocker.set_commands(commandList=dockerInstructions)
 newDocker.connect()
-newDocker.run_commands()
+output = newDocker.run_commands()
+
+```
+
+
+
+### Move file to server via SFTP
+
+How to transfer files with SFTP w & w/o private key authentication
+
+#### SFTP Private Key Authentication example
+
+Here is how you transfer a file with a private key authentication
+
+```
+from publicServerAutomator import Server
+
+someServer = Server(inputKeyPath="publickey.pem", inputKeyPassword='PASS', inputServerIP="0.0.0.0" )
+someServer.connect()
+someServer.transfer_file(full_path_local_file='/home/someGuy/mybigFile.gzip', full_path_target_path='/opt/someSoftware/mybigFile.gzip')
+```
+
+
+#### Using Username and Password SFTP Authentication
+
+Here is how you transfer a file without a private key
+
+```
+from publicServerAutomator import Server
+
+someServer = Server(inputServerIP='8.8.8.8',inputUserName='root', inputPassword='123lookatme', inputKeyPath='')
+someServer.connect()
+someServer.transfer_file(full_path_local_file='/home/someGuy/mybigFile.gzip', full_path_target_path='/opt/someSoftware/mybigFile.gzip')
+
+
 ```
